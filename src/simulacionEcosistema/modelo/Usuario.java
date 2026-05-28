@@ -37,6 +37,11 @@ public class Usuario {
                 }
             }
         }
+        if (valido) {
+            this.nombreCompleto = nombreCompleto;
+        } else {
+            this.nombreCompleto = "Nombre inválido";
+        }
     }
 
     public String getCedula() {
@@ -56,6 +61,12 @@ public class Usuario {
                 }
             }
         }
+        if (valido) {
+            this.cedula = cedula;
+        } else {
+            this.cedula = "0000000000";
+        }
+
     }
 
     public String getCorreo() {

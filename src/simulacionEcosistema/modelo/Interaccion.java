@@ -6,7 +6,6 @@ public class Interaccion {
     private double tasaExito;          // Probabilidad de éxito de la caza (0.0 a 1.0)
     private double factorAfectacion;   // Cuánto golpea el hambre o la sobrepoblación
 
-    // Constructor que soluciona el error de instanciación del Main
     public Interaccion(String nombreDepredador, String nombrePresa, double tasaExito, double factorAfectacion) {
         this.nombreDepredador = nombreDepredador;
         this.nombrePresa = nombrePresa;
@@ -14,11 +13,7 @@ public class Interaccion {
         this.factorAfectacion = factorAfectacion;
     }
 
-    // ======= LÓGICA DE NEGOCIO BIOLÓGICA =======
 
-    /**
-     * Calcula cuántos individuos de la población presa mueren debido a la caza.
-     */
     public int simularCaza(Poblacion presa, Poblacion depredador) {
         if (presa == null || depredador == null || presa.getCantidad() <= 0 || depredador.getCantidad() <= 0) {
             return 0;
@@ -36,7 +31,7 @@ public class Interaccion {
         // Restamos las bajas directamente al modelo de la presa
         presa.setCantidad(presa.getCantidad() - muertesPresa);
 
-        System.out.println("⚔️  [Interacción] " + nombreDepredador + " cazó " + muertesPresa + " individuos de " + nombrePresa + ".");
+        System.out.println(" [Interacción] " + nombreDepredador + " cazó " + muertesPresa + " individuos de " + nombrePresa + ".");
         return muertesPresa;
     }
 
@@ -58,7 +53,7 @@ public class Interaccion {
 
         depredador.setCantidad(nuevaCantidad);
         if (nuevosNacimientos > 0) {
-            System.out.println(" [Interacción] " + nombreDepredador + " aumentó +" + nuevosNacimientos + " individuos gracias al alimento.");
+            System.out.println("[Interacción] " + nombreDepredador + " aumentó +" + nuevosNacimientos + " individuos gracias al alimento.");
         }
     }
 

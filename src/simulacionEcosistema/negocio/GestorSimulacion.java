@@ -5,6 +5,7 @@ import simulacionEcosistema.modelo.*;
 public class GestorSimulacion {
     private Simulacion simulacionActual;
     private Estudiante estudianteJugando;
+    private int regeneracionVegetal;
 
     public GestorSimulacion(Simulacion simulacion, Estudiante estudiante) {
         this.simulacionActual = simulacion;
@@ -30,7 +31,12 @@ public class GestorSimulacion {
         }
         simulacionActual.setActiva(true);
         simulacionActual.setTurnoActual(0);
-        System.out.println("[Gestor] Simulación en marcha. Piloto: " + estudianteJugando.getNombreCompleto());
+
+        if (estudianteJugando != null) {
+            System.out.println("[Gestor] Simulación en marcha. Piloto: " + estudianteJugando.getNombreCompleto());
+        } else {
+            System.out.println("[Gestor] Simulación en marcha. (Modo profesor)");
+        }
     }
 
     public void ejecutarTurno() {
@@ -109,5 +115,14 @@ public class GestorSimulacion {
     public void terminarManualmente() {
         simulacionActual.setActiva(false);
         System.out.println("Simulación finalizada por el usuario.");
+    }
+
+    public Simulacion getSimulacion() {
+        return simulacionActual; //
+    }
+    public void setRegeneracionVegetal(int tasa) {
+        if (simulacionActual != null && simulacionActual.getEntorno() != null) {
+            simulacionActual.getEntorno().setRegeneracionVegetal(tasa);
+        }
     }
 }

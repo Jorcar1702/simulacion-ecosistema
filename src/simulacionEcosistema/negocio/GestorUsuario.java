@@ -2,10 +2,11 @@ package simulacionEcosistema.negocio;
 
 import simulacionEcosistema.modelo.Usuario;
 import simulacionEcosistema.modelo.Estudiante;
+import simulacionEcosistema.modelo.Simulacion;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestorUsuario{
+public class GestorUsuario {
     private List<Usuario> listaUsuarios;
 
     public GestorUsuario() {
@@ -16,8 +17,7 @@ public class GestorUsuario{
         return listaUsuarios;
     }
 
-
-    // Validación de ciberseguridad para evitar credenciales duplicadas
+    // Validación de ciberseguridad
     private boolean existeCedula(String cedula) {
         if (cedula == null) return false;
         for (Usuario u : listaUsuarios) {
@@ -34,7 +34,7 @@ public class GestorUsuario{
         return false;
     }
 
-    // Registro seguro de usuarios
+    // Registro seguro
     public boolean registrarUsuario(Usuario nuevoUsuario) {
         if (nuevoUsuario == null) return false;
 
@@ -51,19 +51,19 @@ public class GestorUsuario{
         return true;
     }
 
-    // Autenticación que recorre la lista polimórfica
+    // Login
     public Usuario buscarUsuarioParaLogin(String username, String password) {
         if (username == null || password == null) return null;
 
         for (Usuario u : listaUsuarios) {
             if (u.estaActivo() && u.iniciarSesion(username.trim(), password)) {
-                return u; // Retorna el objeto (puede ser Estudiante o Administrador)
+                return u;
             }
         }
         return null;
     }
 
-    // Reporte exclusivo para el Profesor usando StringBuilder
+    // Reporte por paralelo
     public String obtenerAlumnosPorParalelo(String paraleloBuscado) {
         if (paraleloBuscado == null || paraleloBuscado.isBlank()) {
             return "Error: Paralelo no válido.";
@@ -75,8 +75,7 @@ public class GestorUsuario{
 
         boolean encontrado = false;
         for (Usuario u : listaUsuarios) {
-            if (u instanceof Estudiante) {
-                Estudiante est = (Estudiante) u; // Downcasting seguro
+            if (u instanceof Estudiante est) {
                 if (est.getParalelo().equalsIgnoreCase(paraleloBuscado.trim())) {
                     sb.append("- ").append(est.getNombreCompleto())
                             .append(" | Logros/Rango: ").append(est.obtenerRecompensa()).append("\n");
@@ -90,4 +89,32 @@ public class GestorUsuario{
         }
         return sb.toString();
     }
+
+    public Usuario buscarPorCedula(String cedula){
+
+        for(Usuario u : listaUsuarios){
+
+            if(u.getCedula().trim().equals(cedula.trim())){
+                return u;
+            }
+        }
+
+        return null;
+    }
+
+    public String darDeBaja(String cedula) {
+        Usuario u = buscarPorCedula(cedula);
+        if (u != null) {
+            listaUsuarios.remove(u);
+            return "Usuario con cédula " + cedula + " dado de baja correctamente.";
+        }
+        return "No se encontró usuario con esa cédula.";
+    }
+    public void registrarSimulacionEnHistorial(Estudiante estudiante, Simulacion simulacion) {
+        if (estudiante != null && simulacion != null) {
+            estudiante.registrarSimulacion(simulacion);
+            System.out.println("Simulación registrada en el historial de " + estudiante.getNombreCompleto());
+        }
+    }
+
 }

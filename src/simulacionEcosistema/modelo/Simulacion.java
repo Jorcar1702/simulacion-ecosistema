@@ -74,6 +74,9 @@ public class Simulacion {
     public void setInteracciones(List<Interaccion> interacciones) {
         this.interacciones = interacciones;
     }
+    public List<Poblacion> getListaPoblaciones() {
+        return poblaciones;
+    }
 
     public Entorno getEntorno() {
         return entorno;
@@ -93,5 +96,32 @@ public class Simulacion {
         if (this.entorno != null) {
             this.entorno.restablecerRecursos();
         }
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n=== ESTADO DEL ECOSISTEMA ===\n");
+        sb.append("Turno actual: ").append(turnoActual).append(" / ").append(tiempoTotal).append("\n");
+        sb.append("Simulación activa: ").append(activa ? "Sí" : "No").append("\n");
+
+        sb.append("\n--- Poblaciones ---\n");
+        for (Poblacion p : poblaciones) {
+            sb.append(p.getEspecie().getNombre())
+                    .append(" -> ").append(p.getCantidad()).append(" individuos\n");
+        }
+
+        sb.append("\n--- Interacciones ---\n");
+        for (Interaccion i : interacciones) {
+            sb.append(i.getNombreDepredador())
+                    .append(" caza a ").append(i.getNombrePresa())
+                    .append(" (probabilidad: ").append(i.getFactorAfectacion()).append(")\n");
+        }
+
+        if (entorno != null) {
+            sb.append("\n--- Entorno ---\n");
+            sb.append(entorno.toString()).append("\n");
+        }
+
+        return sb.toString();
     }
 }

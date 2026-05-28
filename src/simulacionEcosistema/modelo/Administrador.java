@@ -11,9 +11,6 @@ public class Administrador extends Usuario {
 
         }
 
-
-        // ======= SOBRESCRITURA DE MÉTODOS (OVERRIDE) =======
-
         @Override
         public String toString() {
             // Reutilizamos el toString() de la clase padre Usuario y le añadimos los datos del Admin

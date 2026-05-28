@@ -61,4 +61,36 @@ public class Entorno {
             System.out.println("Alertas: " + alertas);
         }
     }
+    public void setAlimentoDisponible(int alimentoDisponible) {
+        if (alimentoDisponible >= 0) {
+            this.alimentoDisponible = alimentoDisponible;
+            System.out.println("[Entorno] Nuevo alimento disponible: " + alimentoDisponible);
+        } else {
+            System.out.println("Error: el alimento disponible debe ser positivo.");
+        }
+    }
+
+    public void setTasaConsumo(int tasaConsumo) {
+        if (tasaConsumo >= 0) {
+            this.tasaConsumo = tasaConsumo;
+            System.out.println("[Entorno] Nueva tasa de consumo: " + tasaConsumo);
+        } else {
+            System.out.println("Error: la tasa de consumo debe ser positiva.");
+        }
+    }
+
+    public void setRegeneracionVegetal(int regeneracionVegetal) {
+        if (regeneracionVegetal >= 0) {
+            this.regeneracionVegetal = regeneracionVegetal;
+            System.out.println("[Entorno] Nueva tasa de regeneración vegetal: " + regeneracionVegetal);
+        } else {
+            System.out.println("Error: la regeneración vegetal debe ser positiva.");
+        }
+    }
+    @Override
+    public String toString() {
+        return "Alimento disponible: " + alimentoDisponible +
+                " | Tasa de consumo: " + tasaConsumo +
+                " | Regeneración vegetal: " + regeneracionVegetal;
+    }
 }

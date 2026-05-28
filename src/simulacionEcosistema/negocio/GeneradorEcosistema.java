@@ -23,30 +23,36 @@ public class GeneradorEcosistema {
 
     public static GestorSimulacion crearEcosistemaBase(Estudiante estudiante, int tiempoMax) {
         Entorno entorno = new Entorno(1000, 2, 50);
-        Simulacion simulacion = new Simulacion(tiempoMax, entorno);
-        GestorSimulacion gestor = new GestorSimulacion(simulacion, estudiante);
 
-        Especie hierba = new Especie("Hierba", "PLANTA", 0.40, 0.10);
-        Especie conejo = new Especie("Conejo Silvestre", "ANIMAL", 0.25, 0.15);
+        Simulacion simulacion =
+                new Simulacion(tiempoMax, entorno);
 
-        gestor.registrarPoblacion(new Poblacion(100, 400, hierba));
-        gestor.registrarPoblacion(new Poblacion(20, 80, conejo));
-
-        gestor.registrarInteraccion(new Interaccion("Conejo Silvestre", "Hierba", 0.30, 1.0));
+        GestorSimulacion gestor = new GestorSimulacion(
+                        simulacion,
+                        estudiante
+                );
 
         return gestor;
     }
+    public static Poblacion crearEspecieConPoblacion(String nombre, String tipo, int cantidad, int capacidad) {
+        Especie nueva = new Especie(nombre, tipo, 0.2, 0.1);
+        Poblacion poblacion = new Poblacion(cantidad, capacidad, nueva);
 
-    // Usuarios de prueba
+        System.out.println("Especie " + nombre + " creada.");
+        System.out.println("Población inicial de " + cantidad + " " + nombre + " registrada en el ecosistema.");
+
+        return poblacion;
+    }
+
     private void cargarUsuariosPorDefecto() {
-        registrarUsuario(new Administrador("Dr. Edison Loza", "1711111111",
-                "edison.loza@udla.edu.ec", "0999999999", "Campus Granados", "admin123"));
+        registrarUsuario(new Administrador("Dr. Joe Garcia", "1711111111",
+                "edison.loza@udla.edu.ec", "jgarcia123", "jgarcia123", "FICA"));
 
         registrarUsuario(new Estudiante("Marco Rodriguez", "1722222222",
-                "marco.rodriguez@udla.ec", "0984444444", "Quito Norte", "A"));
+                "marco.rodriguez@udla.ec", "marro123", "marro123", "A"));
         registrarUsuario(new Estudiante("Jennifer Navarrete", "1733333333",
-                "jennifer.navarrete@udla.ec", "0985555555", "Quito Centro", "A"));
+                "jennifer.navarrete@udla.ec", "jennifer123", "jennifer123", "B"));
         registrarUsuario(new Estudiante("Juan Vallejo", "1744444444",
-                "juan.vallejo@udla.ec", "0986666666", "Quito Sur", "A"));
+                "juan.vallejo@udla.ec", "juan123", "juan123", "C"));
     }
 }
