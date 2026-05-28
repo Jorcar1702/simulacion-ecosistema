@@ -1,4 +1,4 @@
-package simulacionEcosistema.negocio;
+package simulacionEcosistema.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ public class Entorno {
     private int regeneracionVegetal;
     private List<String> alertas;
 
-    // 🔹 Constructor
     public Entorno(int alimentoDisponible, int tasaConsumo, int regeneracionVegetal) {
         this.alimentoDisponible = alimentoDisponible;
         this.tasaConsumo = tasaConsumo;
@@ -45,6 +44,10 @@ public class Entorno {
         if (alimentoDisponible <= 0) {
             aplicarCrisis();
         }
+    }
+    public void restablecerRecursos() {
+        this.alimentoDisponible = 100;
+        System.out.println(" [Entorno] Recursos del bioma restablecidos a su estado inicial.");
     }
 
     public void aplicarCrisis() {
