@@ -61,30 +61,30 @@ public class Entorno {
             System.out.println("Alertas: " + alertas);
         }
     }
-    public void setAlimentoDisponible(int alimentoDisponible) {
+    public void setAlimentoDisponible(int alimentoDisponible) throws Exception {
         if (alimentoDisponible >= 0) {
             this.alimentoDisponible = alimentoDisponible;
             System.out.println("[Entorno] Nuevo alimento disponible: " + alimentoDisponible);
         } else {
-            System.out.println("Error: el alimento disponible debe ser positivo.");
+            throw new Exception("Error: el alimento disponible debe ser positivo.");
         }
     }
 
-    public void setTasaConsumo(int tasaConsumo) {
+    public void setTasaConsumo(int tasaConsumo) throws Exception {
         if (tasaConsumo >= 0) {
             this.tasaConsumo = tasaConsumo;
             System.out.println("[Entorno] Nueva tasa de consumo: " + tasaConsumo);
         } else {
-            System.out.println("Error: la tasa de consumo debe ser positiva.");
+            throw new Exception("Error: la tasa de consumo debe ser positiva.");
         }
     }
 
-    public void setRegeneracionVegetal(int regeneracionVegetal) {
+    public void setRegeneracionVegetal(int regeneracionVegetal) throws Exception {
         if (regeneracionVegetal >= 0) {
             this.regeneracionVegetal = regeneracionVegetal;
             System.out.println("[Entorno] Nueva tasa de regeneración vegetal: " + regeneracionVegetal);
         } else {
-            System.out.println("Error: la regeneración vegetal debe ser positiva.");
+            throw new Exception("Error: la regeneración vegetal debe ser positiva.");
         }
     }
     @Override

@@ -1,9 +1,17 @@
 package simulacionEcosistema.modelo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Simulacion {
+
+    // Definición del período de tiempo que representa un turno del ecosistema.
+    public static final int DIAS_POR_TURNO = 7; // 1 turno = 1 semana simulada
+    private static final DateTimeFormatter FORMATO_FECHA =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
     private int tiempoTotal;
     private int turnoActual;
     private boolean activa;
@@ -11,6 +19,12 @@ public class Simulacion {
     private List<Poblacion> poblaciones;
     private List<Interaccion> interacciones;
     private Entorno entorno;
+
+    private final LocalDateTime fechaCreacion;      // Cuándo se creó/inició la simulación
+    private final List<String> bitacoraTurnos;      // Qué ocurrió en cada turno ejecutado
+    private String estadoInicial;                   // Foto del ecosistema al arrancar
+    private String estadoFinal;                     // Foto del ecosistema al terminar
+    private String resultado;                        // "EN CURSO", "VICTORIA" o "COLAPSO"
 
     // Constructor que blinda el tiempo total contra valores negativos o cero
     public Simulacion(int tiempoTotal, Entorno entorno) {
@@ -21,6 +35,9 @@ public class Simulacion {
         this.poblaciones = new ArrayList<>();
         this.interacciones = new ArrayList<>();
         this.entorno = entorno;
+        this.fechaCreacion = LocalDateTime.now();
+        this.bitacoraTurnos = new ArrayList<>();
+        this.resultado = "EN CURSO";
     }
 
     // ======= GETTERS Y SETTERS (Encapsulamiento puro sin lógica de negocio) =======
@@ -87,12 +104,70 @@ public class Simulacion {
     }
 
 
+    // ======= FECHA Y DURACIÓN DEL TURNO =======
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public String getFechaFormateada() {
+        return fechaCreacion.format(FORMATO_FECHA);
+    }
+
+    public String getDuracionTurnoDescripcion() {
+        return "1 turno equivale a " + DIAS_POR_TURNO + " días (1 semana) del ecosistema simulado.";
+    }
+
+    // ======= BITÁCORA DE TURNOS (para historial y reportes) =======
+
+    public void registrarEventoTurno(String evento) {
+        if (evento != null && !evento.isBlank()) {
+            bitacoraTurnos.add(evento);
+        }
+    }
+
+    public List<String> getBitacoraTurnos() {
+        return bitacoraTurnos;
+    }
+
+    // ======= ESTADO INICIAL / FINAL / RESULTADO =======
+
+    public String getEstadoInicial() {
+        return estadoInicial;
+    }
+
+    public void setEstadoInicial(String estadoInicial) {
+        this.estadoInicial = estadoInicial;
+    }
+
+    public String getEstadoFinal() {
+        return estadoFinal;
+    }
+
+    public void setEstadoFinal(String estadoFinal) {
+        this.estadoFinal = estadoFinal;
+    }
+
+    public String getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(String resultado) {
+        if (resultado != null && !resultado.isBlank()) {
+            this.resultado = resultado;
+        }
+    }
+
     public void reiniciarSimulacion() {
         this.turnoActual = 0;
         this.activa = false;
         this.poblaciones.clear();
         this.interacciones.clear();
         this.especies.clear();
+        this.bitacoraTurnos.clear();
+        this.estadoInicial = null;
+        this.estadoFinal = null;
+        this.resultado = "EN CURSO";
         if (this.entorno != null) {
             this.entorno.restablecerRecursos();
         }
@@ -101,6 +176,7 @@ public class Simulacion {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n=== ESTADO DEL ECOSISTEMA ===\n");
+        sb.append("Fecha de la simulación: ").append(getFechaFormateada()).append("\n");
         sb.append("Turno actual: ").append(turnoActual).append(" / ").append(tiempoTotal).append("\n");
         sb.append("Simulación activa: ").append(activa ? "Sí" : "No").append("\n");
 

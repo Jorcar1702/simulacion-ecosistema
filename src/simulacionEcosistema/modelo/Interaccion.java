@@ -1,10 +1,20 @@
 package simulacionEcosistema.modelo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Interaccion {
+
+    // Porcentaje de la población depredadora que muere por turno cuando no hay presas disponibles.
+    private static final double TASA_HAMBRUNA = 0.20;
+    private static final DateTimeFormatter FORMATO_FECHA =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
     private String nombreDepredador;   // Nombre de la especie que caza
     private String nombrePresa;        // Nombre de la especie cazada
     private double tasaExito;          // Probabilidad de éxito de la caza (0.0 a 1.0)
     private double factorAfectacion;   // Cuánto golpea el hambre o la sobrepoblación
+    private LocalDateTime ultimaEjecucion; // Fecha/hora en que se ejecutó por última vez esta interacción
 
     public Interaccion(String nombreDepredador, String nombrePresa, double tasaExito, double factorAfectacion) {
         this.nombreDepredador = nombreDepredador;
@@ -30,9 +40,40 @@ public class Interaccion {
 
         // Restamos las bajas directamente al modelo de la presa
         presa.setCantidad(presa.getCantidad() - muertesPresa);
+        this.ultimaEjecucion = LocalDateTime.now();
 
-        System.out.println(" [Interacción] " + nombreDepredador + " cazó " + muertesPresa + " individuos de " + nombrePresa + ".");
+        System.out.println(" [Interacción " + this.ultimaEjecucion.format(FORMATO_FECHA) + "] "
+                + nombreDepredador + " cazó " + muertesPresa + " individuos de " + nombrePresa + ".");
         return muertesPresa;
+    }
+
+    /**
+     * Cuando la presa se extinguió (cantidad = 0), el depredador empieza a morir de hambre
+     * turno a turno hasta que aparezca comida de nuevo o se extinga también.
+     */
+    public int aplicarHambrunaPorFaltaDePresa(Poblacion depredador) {
+        if (depredador == null || depredador.getCantidad() <= 0) return 0;
+
+        int muertesPorHambre = (int) Math.ceil(depredador.getCantidad() * TASA_HAMBRUNA);
+        if (muertesPorHambre > depredador.getCantidad()) {
+            muertesPorHambre = depredador.getCantidad();
+        }
+
+        depredador.setCantidad(depredador.getCantidad() - muertesPorHambre);
+        this.ultimaEjecucion = LocalDateTime.now();
+
+        System.out.println(" [Hambruna " + this.ultimaEjecucion.format(FORMATO_FECHA) + "] "
+                + nombreDepredador + " perdió " + muertesPorHambre
+                + " individuos por falta de " + nombrePresa + " (población de presa en 0).");
+        return muertesPorHambre;
+    }
+
+    public LocalDateTime getUltimaEjecucion() {
+        return ultimaEjecucion;
+    }
+
+    public String getUltimaEjecucionFormateada() {
+        return ultimaEjecucion != null ? ultimaEjecucion.format(FORMATO_FECHA) : "Sin ejecutar todavía";
     }
 
     /**

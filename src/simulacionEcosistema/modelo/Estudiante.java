@@ -2,32 +2,41 @@ package simulacionEcosistema.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import simulacionEcosistema.modelo.Logro;
 
 public class Estudiante extends Usuario {
     private String paralelo; // A, B o C
     private List<Simulacion> historialSimulaciones;
     private int simulacionesExitosas; //
+    private List<Logro> logros;
 
     public Estudiante(String nombreCompleto, String cedula, String correo,
-                      String nombreUsuario, String contrasena, String paralelo) {
+                      String nombreUsuario, String contrasena, String paralelo)throws Exception {
         super(nombreCompleto, cedula, correo, nombreUsuario, contrasena);
         setParalelo(paralelo);
         this.historialSimulaciones = new ArrayList<>();
         this.simulacionesExitosas = 0;
+        this.logros = new ArrayList<>();
     }
 
     public List<Simulacion> getHistorialSimulaciones() {
         return historialSimulaciones;
     }
 
-    public void setParalelo(String paralelo) {
-        if (paralelo != null && (paralelo.equalsIgnoreCase("A") ||
-                paralelo.equalsIgnoreCase("B") ||
-                paralelo.equalsIgnoreCase("C"))) {
-            this.paralelo = paralelo.toUpperCase().trim();
-        } else {
-            this.paralelo = "A";
+    public void setParalelo(String paralelo) throws Exception {
+        if (paralelo == null || paralelo.isBlank()) {
+            throw new Exception("Paralelo no puede ser nulo.");
         }
+
+        paralelo = paralelo.toUpperCase().trim();
+
+        if (!paralelo.equals("A") &&
+                !paralelo.equals("B") &&
+                !paralelo.equals("C")) {
+            throw new Exception("Paralelo inválido. Solo A, B o C.");
+        }
+
+        this.paralelo = paralelo;
     }
 
     public void registrarSimulacionExitosa() {
@@ -37,6 +46,14 @@ public class Estudiante extends Usuario {
 
     public int getSimulacionesExitosas() {
         return simulacionesExitosas;
+    }
+
+    public List<Logro> getLogros() { return logros; }
+
+    public void agregarLogro(Logro logro) {
+        if (logro != null && !logros.contains(logro)) {
+            logros.add(logro);
+        }
     }
 
     public String obtenerRecompensa() {
@@ -51,8 +68,24 @@ public class Estudiante extends Usuario {
         }
     }
     public void registrarSimulacion(Simulacion simulacion) {
-        if (simulacion != null) {
+        if (simulacion != null && !historialSimulaciones.contains(simulacion)) {
             historialSimulaciones.add(simulacion);
+        }
+    }
+
+    /**
+     * Cuántas simulaciones exitosas más se necesitan para alcanzar el siguiente rango.
+     * Devuelve 0 si ya se alcanzó el rango máximo.
+     */
+    public int simulacionesParaSiguienteRango() {
+        if (simulacionesExitosas == 0) {
+            return 1 - simulacionesExitosas;       // siguiente: Protector del Entorno
+        } else if (simulacionesExitosas <= 2) {
+            return 3 - simulacionesExitosas;        // siguiente: Guardián del Ecosistema
+        } else if (simulacionesExitosas <= 5) {
+            return 6 - simulacionesExitosas;        // siguiente: Maestro de la Biósfera
+        } else {
+            return 0; // rango máximo alcanzado
         }
     }
 
