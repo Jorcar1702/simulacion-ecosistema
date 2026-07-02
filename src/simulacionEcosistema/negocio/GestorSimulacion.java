@@ -1,6 +1,8 @@
 package simulacionEcosistema.negocio;
 
 import simulacionEcosistema.modelo.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class GestorSimulacion {
     private Simulacion simulacionActual;
@@ -30,7 +32,14 @@ public class GestorSimulacion {
         }
         simulacionActual.setActiva(true);
         simulacionActual.setTurnoActual(0);
-        simulacionActual.setEstadoInicial(simulacionActual.toString());
+
+        // Crear snapshot del estado inicial: nombre de especie -> cantidad
+        Map<String, Integer> snapshot = new LinkedHashMap<>();
+        for (Poblacion p : simulacionActual.getPoblaciones()) {
+            snapshot.put(p.getEspecie().getNombre(), p.getCantidad());
+        }
+        simulacionActual.setEstadoInicial(snapshot);
+        simulacionActual.setPoblacionesInicial(simulacionActual.getPoblaciones());
 
         System.out.println(simulacionActual.getDuracionTurnoDescripcion());
         if (estudianteJugando != null) {
@@ -124,7 +133,21 @@ public class GestorSimulacion {
             }
         }
 
-        simulacionActual.setEstadoFinal(simulacionActual.toString());
+        // Crear snapshot del estado final: nombre de especie -> cantidad final
+        Map<String, Integer> snapshotFinal = new LinkedHashMap<>();
+        for (Poblacion p : simulacionActual.getPoblaciones()) {
+            snapshotFinal.put(p.getEspecie().getNombre(), p.getCantidad());
+        }
+
+        StringBuilder estadoFinalFormatted = new StringBuilder();
+        estadoFinalFormatted.append("\n=== ESTADO FINAL DEL ECOSISTEMA ===\n");
+        estadoFinalFormatted.append("Turno final: ").append(simulacionActual.getTurnoActual()).append(" / ").append(simulacionActual.getTiempoTotal()).append("\n");
+        estadoFinalFormatted.append("\nPoblaciones finales:\n");
+        for (Map.Entry<String, Integer> entry : snapshotFinal.entrySet()) {
+            estadoFinalFormatted.append("- ").append(entry.getKey()).append(": ").append(entry.getValue()).append(" individuos\n");
+        }
+
+        simulacionActual.setEstadoFinal(estadoFinalFormatted.toString());
 
         System.out.println("\n=============================================");
         if (ecosistemaEstable) {
@@ -146,7 +169,7 @@ public class GestorSimulacion {
         if (estudianteJugando != null) {
             estudianteJugando.registrarSimulacion(simulacionActual);
             // Evaluar posibles logros tras guardar la simulación
-            GestorLogros.evaluarLogros(estudianteJugando, simulacionActual);
+            GestorLogro.evaluarLogros(estudianteJugando, simulacionActual);
         }
     }
 
@@ -179,39 +202,45 @@ public class GestorSimulacion {
      * como para exportarlo a un archivo.
      */
     public String generarReporteTexto() {
-        String reporte = "";
-        Simulacion s = simulacionActual;
+         String reporte = "";
+         Simulacion s = simulacionActual;
 
-        reporte += "==================== REPORTE DE SIMULACIÓN ====================\n";
-        reporte += "Fecha de la simulación: " + s.getFechaFormateada() + "\n";
-        reporte += s.getDuracionTurnoDescripcion() + "\n";
-        reporte += "Turnos ejecutados: " + s.getTurnoActual() + " / " + s.getTiempoTotal() + "\n";
-        reporte += "Estado de la simulación: " + (s.isActiva() ? "En curso" : "Finalizada") + "\n";
-        reporte += "Resultado: " + s.getResultado() + "\n";
-        if (estudianteJugando != null) {
-            reporte += "Estudiante: " + estudianteJugando.getNombreCompleto() +
-                    " (Paralelo " + estudianteJugando.getParalelo() + ")\n";
-        }
+         reporte += "==================== REPORTE DE SIMULACIÓN ====================\n";
+         reporte += "Fecha de la simulación: " + s.getFechaFormateada() + "\n";
+         reporte += s.getDuracionTurnoDescripcion() + "\n";
+         reporte += "Turnos ejecutados: " + s.getTurnoActual() + " / " + s.getTiempoTotal() + "\n";
+         reporte += "Estado de la simulación: " + (s.isActiva() ? "En curso" : "Finalizada") + "\n";
+         reporte += "Resultado: " + s.getResultado() + "\n";
+         if (estudianteJugando != null) {
+             reporte += "Estudiante: " + estudianteJugando.getNombreCompleto() +
+                     " (Paralelo " + estudianteJugando.getParalelo() + ")\n";
+         }
 
-        reporte += "\n--- ESTADO INICIAL ---\n";
-        reporte += (s.getEstadoInicial() != null ? s.getEstadoInicial() : "No disponible (aún no se ha iniciado).");
-        reporte += "\n";
+         reporte += "\n--- ESTADO INICIAL ---\n";
+         Map<String, Integer> estadoIni = s.getEstadoInicial();
+         if (estadoIni != null && !estadoIni.isEmpty()) {
+             for (Map.Entry<String, Integer> entry : estadoIni.entrySet()) {
+                 reporte += entry.getKey() + ": " + entry.getValue() + " individuos\n";
+             }
+         } else {
+             reporte += "No disponible (aún no se ha iniciado).\n";
+         }
 
-        reporte += "\n--- EVENTOS POR TURNO ---\n";
-        if (s.getBitacoraTurnos().isEmpty()) {
-            reporte += "Todavía no se ha ejecutado ningún turno.\n";
-        } else {
-            for (String evento : s.getBitacoraTurnos()) {
-                reporte += evento + "\n";
-            }
-        }
+         reporte += "\n--- EVENTOS POR TURNO ---\n";
+         if (s.getBitacoraTurnos().isEmpty()) {
+             reporte += "Todavía no se ha ejecutado ningún turno.\n";
+         } else {
+             for (String evento : s.getBitacoraTurnos()) {
+                 reporte += evento + "\n";
+             }
+         }
 
-        reporte += "\n--- ESTADO FINAL ---\n";
-        reporte += (s.getEstadoFinal() != null ? s.getEstadoFinal() : s.toString());
-        reporte += "\n=================================================================\n";
+         reporte += "\n--- ESTADO FINAL ---\n";
+         reporte += (s.getEstadoFinal() != null ? s.getEstadoFinal() : s.toString());
+         reporte += "\n=================================================================\n";
 
-        return reporte;
-    }
+         return reporte;
+     }
     public void setRegeneracionVegetal(int tasa) throws Exception {
         if (simulacionActual != null && simulacionActual.getEntorno() != null) {
             simulacionActual.getEntorno().setRegeneracionVegetal(tasa);

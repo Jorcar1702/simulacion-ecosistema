@@ -3,7 +3,9 @@ package simulacionEcosistema.modelo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Simulacion {
 
@@ -17,12 +19,13 @@ public class Simulacion {
     private boolean activa;
     private List<Especie> especies;
     private List<Poblacion> poblaciones;
+    private List<Poblacion> poblacionesInicial;  // Copia de poblaciones al inicio
+    private Map<String, Integer> estadoInicial;  // Snapshot: nombre especie -> cantidad inicial
     private List<Interaccion> interacciones;
     private Entorno entorno;
 
     private final LocalDateTime fechaCreacion;      // Cuándo se creó/inició la simulación
     private final List<String> bitacoraTurnos;      // Qué ocurrió en cada turno ejecutado
-    private String estadoInicial;                   // Foto del ecosistema al arrancar
     private String estadoFinal;                     // Foto del ecosistema al terminar
     private String resultado;                        // "EN CURSO", "VICTORIA" o "COLAPSO"
 
@@ -33,6 +36,8 @@ public class Simulacion {
         this.activa = false;
         this.especies = new ArrayList<>();
         this.poblaciones = new ArrayList<>();
+        this.poblacionesInicial = new ArrayList<>();
+        this.estadoInicial = new LinkedHashMap<>();
         this.interacciones = new ArrayList<>();
         this.entorno = entorno;
         this.fechaCreacion = LocalDateTime.now();
@@ -95,6 +100,27 @@ public class Simulacion {
         return poblaciones;
     }
 
+    public List<Poblacion> getPoblacionesInicial() {
+        return poblacionesInicial;
+    }
+
+    public void setPoblacionesInicial(List<Poblacion> poblaciones) {
+        if (poblaciones != null) {
+            this.poblacionesInicial = new ArrayList<>(poblaciones);
+        }
+    }
+
+    // Estado inicial: snapshot de nombre especie -> cantidad inicial
+    public Map<String, Integer> getEstadoInicial() {
+        return estadoInicial;
+    }
+
+    public void setEstadoInicial(Map<String, Integer> estadoInicial) {
+        if (estadoInicial != null) {
+            this.estadoInicial = new LinkedHashMap<>(estadoInicial);
+        }
+    }
+
     public Entorno getEntorno() {
         return entorno;
     }
@@ -130,15 +156,7 @@ public class Simulacion {
         return bitacoraTurnos;
     }
 
-    // ======= ESTADO INICIAL / FINAL / RESULTADO =======
-
-    public String getEstadoInicial() {
-        return estadoInicial;
-    }
-
-    public void setEstadoInicial(String estadoInicial) {
-        this.estadoInicial = estadoInicial;
-    }
+    // ======= ESTADO FINAL / RESULTADO =======
 
     public String getEstadoFinal() {
         return estadoFinal;
@@ -162,10 +180,11 @@ public class Simulacion {
         this.turnoActual = 0;
         this.activa = false;
         this.poblaciones.clear();
+        this.poblacionesInicial.clear();
+        this.estadoInicial.clear();
         this.interacciones.clear();
         this.especies.clear();
         this.bitacoraTurnos.clear();
-        this.estadoInicial = null;
         this.estadoFinal = null;
         this.resultado = "EN CURSO";
         if (this.entorno != null) {

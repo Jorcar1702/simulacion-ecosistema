@@ -9,6 +9,7 @@ public class Estudiante extends Usuario {
     private List<Simulacion> historialSimulaciones;
     private int simulacionesExitosas; //
     private List<Logro> logros;
+    private Simulacion simulacionEnCurso;
 
     public Estudiante(String nombreCompleto, String cedula, String correo,
                       String nombreUsuario, String contrasena, String paralelo)throws Exception {
@@ -73,19 +74,25 @@ public class Estudiante extends Usuario {
         }
     }
 
-    /**
-     * Cuántas simulaciones exitosas más se necesitan para alcanzar el siguiente rango.
-     * Devuelve 0 si ya se alcanzó el rango máximo.
-     */
+
+    public Simulacion getSimulacionEnCurso() {
+        return simulacionEnCurso;
+    }
+
+    public void setSimulacionEnCurso(Simulacion simulacionEnCurso) {
+        this.simulacionEnCurso = simulacionEnCurso;
+    }
+
+
     public int simulacionesParaSiguienteRango() {
         if (simulacionesExitosas == 0) {
-            return 1 - simulacionesExitosas;       // siguiente: Protector del Entorno
+            return 1 - simulacionesExitosas;
         } else if (simulacionesExitosas <= 2) {
-            return 3 - simulacionesExitosas;        // siguiente: Guardián del Ecosistema
+            return 3 - simulacionesExitosas;
         } else if (simulacionesExitosas <= 5) {
-            return 6 - simulacionesExitosas;        // siguiente: Maestro de la Biósfera
+            return 6 - simulacionesExitosas;
         } else {
-            return 0; // rango máximo alcanzado
+            return 0;
         }
     }
 

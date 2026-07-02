@@ -95,6 +95,7 @@ public abstract class Usuario {
     }
 
     public void desactivar() { this.estado = "INACTIVO"; }
+    public void activar() { this.estado = "ACTIVO"; }
     public boolean estaActivo() { return "ACTIVO".equalsIgnoreCase(estado); }
 
     public boolean iniciarSesion(String nombreUsuario, String contrasena) {

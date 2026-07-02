@@ -3,7 +3,7 @@ package simulacionEcosistema.negocio;
 import simulacionEcosistema.modelo.*;
 import java.util.List;
 
-public class GestorLogros {
+public class GestorLogro {
 
     public static void evaluarLogros(Estudiante estudiante, Simulacion simulacion) {
         if (estudiante == null || simulacion == null) return;
@@ -53,7 +53,7 @@ public class GestorLogros {
                 // (Esta regla es similar a la anterior; se mantiene por claridad de nombres)
                 if (mantenerTodasPoblacionesVivas(simulacion)) {
                     if (!tieneLogroTipo(estudiante.getLogros(), "MANTENER_TODAS_VIVAS")) {
-                        Logro l = new Logro("Guardían de la Vida",
+                        Logro l = new Logro("Guardián de la Vida",
                                 "Mantener todas las poblaciones vivas al finalizar la simulación",
                                 "MANTENER_TODAS_VIVAS");
                         otorgarLogro(estudiante, l);
@@ -156,6 +156,4 @@ public class GestorLogros {
         return resultado;
     }
 }
-
-
 

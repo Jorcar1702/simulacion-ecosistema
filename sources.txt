@@ -1,0 +1,15 @@
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\interfaz\InterfazGrafica.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\interfaz\MainSimulacion.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Administrador.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Entorno.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Especie.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Estudiante.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Interaccion.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Logro.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Poblacion.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Simulacion.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\modelo\Usuario.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\negocio\GeneradorEcosistema.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\negocio\GestorLogro.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\negocio\GestorSimulacion.java
+C:\Users\usuario\Downloads\corregido1\src\simulacionEcosistema\negocio\GestorUsuario.java

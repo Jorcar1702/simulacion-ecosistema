@@ -436,7 +436,7 @@ public class MainSimulacion {
 
                 case 14: {
                     if (estudianteActivo != null) {
-                        System.out.println(GestorLogros.obtenerLogrosPorEstudiante(estudianteActivo));
+                        System.out.println(GestorLogro.obtenerLogrosPorEstudiante(estudianteActivo));
                     } else {
                         System.out.println("Debe iniciar sesión como estudiante para ver sus logros.");
                     }

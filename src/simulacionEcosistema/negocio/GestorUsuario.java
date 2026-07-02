@@ -103,8 +103,12 @@ public class GestorUsuario {
     public String darDeBaja(String cedula) {
         Usuario u = buscarPorCedula(cedula);
         if (u != null) {
-            listaUsuarios.remove(u);
-            return "Usuario con cédula " + cedula + " dado de baja correctamente.";
+            try {
+                u.desactivar();
+                return "Usuario con cédula " + cedula + " dado de baja correctamente.";
+            } catch (Exception ex) {
+                return "No se pudo cambiar el estado del usuario: " + ex.getMessage();
+            }
         }
         return "No se encontró usuario con esa cédula.";
     }
